@@ -1,138 +1,94 @@
-import React from 'react'
+import React, {Component} from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import EmojiPicker from 'emoji-picker-react';
+import JSEMOJI from 'emoji-js';
 
-const Chat = () => {
-    return (
-        <div className="chat-application" style={{height: '700px'}}>
-            <section className="chat-app-window">
-                <div className="chats">
-                    <div className="chats">
-                        <div className="chat">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="right" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-1.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>How can we help? We're here for you!</p>
+import ChatForm from './ChatForm';
+
+import styles from './Chart.css';
+import './chat.scss';
+
+//emoji set up
+let jsemoji = new JSEMOJI();
+// set the style to emojione (default - apple)
+jsemoji.img_set = 'emojione';
+// set the storage location for all emojis
+jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/emojione/assets/3.0/png/32/';
+class Chat extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowEmoji: false,
+            text: ''
+        }
+    }
+    handleEmojiClick = (n, e) => {
+        let emoji = jsemoji.replace_colons(`:${e.name}:`);
+        console.log(n)
+        console.log(e)
+        console.log(emoji)
+        this.setState({
+          text: this.state.text + `${emoji}`,
+          isShowEmoji: false
+        });
+      }
+
+      handleShowEmoji = () => {
+          this.setState({
+            isShowEmoji: !this.state.isShowEmoji
+          })
+      }
+      handleChange = (value) => {
+          this.setState({
+              text: value
+          })
+      }
+    render () {
+        const {expertChat, currentUser} = this.props
+        return (
+            <div className="chat-application" style={{height: '700px', position: 'relative'}}>
+                <section className="chat-app-window">
+                {expertChat &&
+                    expertChat.map(Chat => (
+                        <div key={Chat.id} className="chats">
+                            <div className="chats">
+                                <div className={`chat ${Chat.uid !== currentUser.uid ? 'chat-left' : '' }`}>
+                                    <div className="chat-avatar">
+                                        <a className="avatar" data-toggle="tooltip" data-placement="right" title="true" data-original-title>
+                                        <img src={Chat.photoURL} className="width-50 rounded-circle" alt="avatar" />
+                                        </a>
+                                    </div>
+                                    <div className="chat-body">
+                                        <div className="chat-content">
+                                        <p>{Chat.text}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                        <div className="chat chat-left">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="left" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-7.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>Hey John,  I am looking for the best admin template.</p>
-                            <p>Could you please help me to find it out?</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>It should be Bootstrap 4 compatible.</p>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="chat">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="right" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-1.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>Absolutely!</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>Apex admin is the responsive bootstrap 4 admin template.</p>
-                            </div>
-                        </div>
-                        </div>
-                        <p className="time">1 hours ago</p>
-                        <div className="chat chat-left">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="left" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-7.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>Looks clean and fresh UI.</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>It's perfect for my next project.</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>How can I purchase it?</p>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="chat">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="right" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-1.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>Thanks, from ThemeForest.</p>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="chat chat-left">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="left" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-7.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>I will purchase it for sure.</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>Thanks.</p>
-                            </div>              
-                        </div>
-                        </div>
-                        <div className="chat">
-                        <div className="chat-avatar">
-                            <a className="avatar" data-toggle="tooltip" href="#" data-placement="right" title data-original-title>
-                            <img src="../app-assets/img/portrait/small/avatar-s-1.png" className="width-50 rounded-circle" alt="avatar" />
-                            </a>
-                        </div>
-                        <div className="chat-body">
-                            <div className="chat-content">
-                            <p>Great, Feel free to get in touch on</p>
-                            </div>
-                            <div className="chat-content">
-                            <p>https://pixinvent.ticksy.com/</p>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
+                     ))}
                 </section>
-            <section className="chat-app-form bg-blue-grey bg-lighten-5">
-                <form className="chat-app-input row">
-                    <fieldset className="form-group position-relative has-icon-left col-lg-10 col-8 m-0">
-                        <div className="form-control-position">
-                        <i className="icon-emoticon-smile" />
-                        </div>
-                        <input type="text" className="form-control" id="iconLeft4" placeholder="Type your message" /> 
-                        <div className="form-control-position control-position-right">
-                        <i className="ft-image" />
-                        </div>
-                    </fieldset>
-                    <fieldset className="form-group position-relative has-icon-left col-lg-2 col-4 m-0">
-                        <button type="button" className="btn btn-raised btn-primary">
-                        <i className="fa fa-paper-plane-o hidden-lg-up" /> Send</button>
-                    </fieldset>
-                </form>
-            </section>
-        </div>
+                  
+                <section className="chat-app-form bg-blue-grey bg-lighten-5">
+                    <ChatForm expertId={this.props.expertId} handleChange={this.handleChange} handleShowEmoji={this.handleShowEmoji} text={this.state.text}/>
+                </section>
+                {this.state.isShowEmoji &&
+                    <div className={styles.emojiContainer}>
+                    <EmojiPicker onEmojiClick={this.handleEmojiClick} />
+                </div>
+                }
+            </div>
 
-    )
+        )
+    }
 }
 
-export default Chat
+const mapStateToProps = state => {
+    return {
+      currentUser: state.firebase.auth,
+    }
+  }
+
+export default compose ( connect(mapStateToProps, null)
+  )(Chat) 
